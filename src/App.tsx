@@ -7,6 +7,8 @@ import './App.css'
 import RickAndMortyList from './pages/RickAndMortyList';
 
 const App = () => {
+  console.log('message');
+  
 
   const dispatch = useDispatch<AppDispatch>()
   
