@@ -1,8 +1,7 @@
 import { FC } from 'react'
-import { IRickAndMortyProps } from '../../types/types';
+import { IRickAndMortyProps } from '../../types/content';
 
 const RickAndMortyItemRight: FC<IRickAndMortyProps> = ({ props }) => {
-  console.log(props);
   
   return (
   <>

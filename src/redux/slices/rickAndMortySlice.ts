@@ -1,4 +1,4 @@
-import { IRickAndMorty, IRickAndMortyState } from './../../types/types';
+import { IRickAndMorty, IRickAndMortyState } from '../../types/content';
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 

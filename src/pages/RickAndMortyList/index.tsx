@@ -1,29 +1,37 @@
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
+import { useEffect} from 'react'
 import RickAndMortyItemLeft from "../RickAndMortyItemLeft";
 import RickAndMortyItemRight from "../RickAndMortyItemRight";
 import Video from '../../media/rickandmorty.mp4'
-import { IRickAndMorty } from "../../types/types";
+import { fetchingRickAndMorty } from "../../redux/actions/rickAndMortyActions";
+import image from '../../assets/image/rickAndMorty.jpg'
 
 const RickAndMortyList = () => {
-  
   const { content } = useSelector((state: RootState) => state.rickAndMorty)
+
+  const dispatch = useDispatch<AppDispatch>()
   
-  window.onload = function () {
+  useEffect(() => {
+    dispatch(fetchingRickAndMorty())
+  }, [dispatch])
+  
+  const depthValue = `${+content.length * 735}px`;
+  document.documentElement.style.setProperty('--depth', depthValue);
+  
+  window.onload = () => {
     let zSpacing = -1200,
       lastPos = zSpacing / 5,
-      $frames = document.getElementsByClassName('frame'),
-      frames = Array.from($frames),
-      zVals: any = []
+      frames = [...document.querySelectorAll('.frame')],
+      zVals:number[] = []
   
-    window.onscroll = function () {
-
+    window.onscroll = () => {
       let top = document.documentElement.scrollTop,
         delta = lastPos - top
     
       lastPos = top
     
-      frames.forEach(function (n, i) {
+      frames.forEach((n, i) => {
         zVals.push((i * zSpacing) + zSpacing)
         zVals[i] += delta * -5.5
         let frame = frames[i],
@@ -36,7 +44,6 @@ const RickAndMortyList = () => {
     window.scrollTo(0, 1)
   }
 
-      
   return (
     <div className="container">
 		<section className="gallery">
@@ -49,7 +56,7 @@ const RickAndMortyList = () => {
         
       <div className="frame">
 				<div className="frame__content">
-					<div className="frame-media frame-media_left" style={{backgroundImage: `url(https://www.pravilamag.ru/upload/img_cache/652/65234820e716d5e5d0159ac9bccc8314_ce_1622x1080x148x0.jpg)`}}></div>
+					<div className="frame-media frame-media_left" style={{backgroundImage: `url(${image})`}}></div>
 				</div>
 			</div>
 
@@ -62,7 +69,11 @@ const RickAndMortyList = () => {
 			<div className="frame"/>
         {content.map((el, i) => i % 2 ? <RickAndMortyItemRight key={el.id} props={el} />
           : <RickAndMortyItemLeft key={el.id} props={el} />)}
-      </section>
+
+			<div className="frame">
+				<div className="frame__contents">© Khristoforov Yaroslav</div>
+      </div>
+    </section>
 	</div>
   )
 }
