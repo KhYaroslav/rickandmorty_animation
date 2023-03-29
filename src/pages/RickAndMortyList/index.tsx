@@ -67,8 +67,8 @@ const RickAndMortyList = () => {
       </div>
         
 			<div className="frame"/>
-        {content.map((el, i) => i % 2 ? <RickAndMortyItemRight key={el.id} props={el} />
-          : <RickAndMortyItemLeft key={el.id} props={el} />)}
+        {content.map((el, i) => i % 2 ? <RickAndMortyItemRight key={el.id} {...el} />
+          : <RickAndMortyItemLeft key={el.id} {...el} />)}
 
 			<div className="frame">
 				<div className="frame__contents">© Khristoforov Yaroslav</div>
