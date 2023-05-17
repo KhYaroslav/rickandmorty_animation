@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
-import { useEffect} from 'react'
+import { useEffect, useLayoutEffect} from 'react'
 import RickAndMortyItemLeft from "../RickAndMortyItemLeft";
 import RickAndMortyItemRight from "../RickAndMortyItemRight";
 import Video from '../../media/rickandmorty.mp4'
@@ -16,21 +16,19 @@ const RickAndMortyList = () => {
     dispatch(fetchingRickAndMorty())
   }, [dispatch])
   
-  const depthValue = `${+content.length * 735}px`;
-  document.documentElement.style.setProperty('--depth', depthValue);
-  
-  window.onload = () => {
+  useLayoutEffect(() => {
     let zSpacing = -1200,
       lastPos = zSpacing / 5,
       frames = [...document.querySelectorAll('.frame')],
-      zVals:number[] = []
+      zVals: number[] = [],
+      isScrolled = false
   
-    window.onscroll = () => {
+    const handleScroll = () => {
       let top = document.documentElement.scrollTop,
         delta = lastPos - top
-    
+  
       lastPos = top
-    
+  
       frames.forEach((n, i) => {
         zVals.push((i * zSpacing) + zSpacing)
         zVals[i] += delta * -5.5
@@ -39,11 +37,23 @@ const RickAndMortyList = () => {
           opacity = zVals[i] < Math.abs(zSpacing) / 1.8 ? 1 : 0
         frame.setAttribute('style', `transform: ${transform}; opacity: ${opacity}`)
       })
-    
+  
     }
-    window.scrollTo(0, 1)
-  }
+    window.addEventListener('scroll', handleScroll)
 
+    if (!isScrolled) {
+      window.scrollBy(0, 10)
+      isScrolled = true
+    }
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [content])
+
+  const depthValue = `${+content.length * 745}px`;
+  document.documentElement.style.setProperty('--depth', depthValue);
+  
   return (
     <div className="container">
 		<section className="gallery">
